@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace MicroServicesHackathon.Repository.Tests
 {
-    public class Class1
+    public class A
     {
+        public int X { get; set; }
+        public int Y { get; set; }
     }
 }

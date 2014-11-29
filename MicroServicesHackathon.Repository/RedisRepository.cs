@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using StackExchange.Redis;
 
-namespace MicroServicesHackathon
+namespace MicroServicesHackathon.Repository
 {
     public class RedisRepository : IRepository
     {
