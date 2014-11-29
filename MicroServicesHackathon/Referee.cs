@@ -4,6 +4,7 @@ using System.Linq;
 
 namespace MicroServicesHackathon
 {
+    using System.Threading.Tasks;
     using MicroServicesHackathon.Domain;
     using MicroServicesHackathon.Facts;
     using MicroServicesHackathon.Rest;
@@ -21,29 +22,61 @@ namespace MicroServicesHackathon
             _acceptedMovementSubscribeId = _restClient.Subscribe(ProposedMovement.Topic);
         }
 
-        public void ProcessMovements()
-        {
-            while (true) {
-                ProposedMovement fact = _restClient.NextFact<ProposedMovement>(
-                    ProposedMovement.Topic,
-                    _acceptedMovementSubscribeId);
+        public bool IsGameOver { get; set; }
 
-                Movement movement = Convert(fact);
-                IList<Movement> previousMovements = 
-                    _acceptedMovementRepository.GetGame(fact.GameId)
+        public Task Start()
+        {
+            IsGameOver = false;
+
+            return Task.Factory.StartNew(() =>
+            {
+                while (!IsGameOver) {
+                    ProcessMovement();
+                }
+            });
+        }
+
+        public void ProcessMovement()
+        {
+            ProposedMovement fact = GetMovement();
+            Movement movement = Convert(fact);
+
+            IList<Movement> previousMovements =
+                _acceptedMovementRepository.GetGame(fact.GameId)
                     .Select(Convert)
                     .ToList();
-                Board board = new Board(previousMovements);
-                if (board.IsValid(movement)) {
-                    AcceptedMovement acceptedMovement = Accept(fact);
-                    _restClient.PostFact(acceptedMovement.TopicName, acceptedMovement);
-                    _acceptedMovementRepository.Save(fact);
+            Board board = new Board(previousMovements);
 
+            if (board.IsValid(movement)) {
+                AcceptedMovement acceptedMovement = Accept(fact);
+                _restClient.PostFact(acceptedMovement.TopicName, acceptedMovement);
+                _acceptedMovementRepository.Save(acceptedMovement);
+            } else {
+                InvalidMovement invalidMovement = Reject(fact);
+                _restClient.PostFact(invalidMovement.TopicName, invalidMovement);
+            }
+        }
+
+        private ProposedMovement GetMovement()
+        {
+            ProposedMovement fact = null;
+
+            int attempted = 10;
+            while (attempted > 0) {
+                fact = _restClient.NextFact<ProposedMovement>(
+                    ProposedMovement.Topic,
+                    _acceptedMovementSubscribeId,
+                    30);
+                if (fact == null) {
+                    attempted--;
                 } else {
-                    InvalidMovement invalidMovement = Reject(fact);
-                    _restClient.PostFact(invalidMovement.TopicName, invalidMovement);
+                    break;
                 }
             }
+
+            if (fact == null)
+                throw new TimeoutException("Unable to get a proposed movement within the expected attempts");
+            return fact;
         }
 
         private static Movement Convert(MovementFact fact)
@@ -77,7 +110,7 @@ namespace MicroServicesHackathon
 
     public interface IRepository
     {
-        void Save(MovementFact movement);
+        void Save(AcceptedMovement movement);
         IEnumerable<AcceptedMovement> GetGame(string gameId);
     }
 }
