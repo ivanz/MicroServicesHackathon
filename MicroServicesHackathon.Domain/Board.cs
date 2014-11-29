@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace MicroServicesHackathon.Domain
 {
+    using System.Linq;
+
     public class Board
     {
-        private List<Movement> _movements;
+        private readonly List<Movement> _movements;
 
         public Board() : this(new List<Movement>())
         {
@@ -29,9 +30,12 @@ namespace MicroServicesHackathon.Domain
 
         public int Size { get; private set; }
 
-        public bool MakeMove(Movement movement)
+        public bool IsValid(Movement movement)
         {
-            throw new NotImplementedException();
+            if (movement.X > Size || movement.Y > Size)
+                return false;
+
+            return !Movements.Any(m => m.X == movement.X && m.Y == movement.Y);
         }
     }
 }
