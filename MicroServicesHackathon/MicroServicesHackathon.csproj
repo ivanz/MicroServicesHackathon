@@ -41,11 +41,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChatFact.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MicroServicesHackathon.Domain\MicroServicesHackathon.Domain.csproj">
+      <Project>{6d7d639b-9b21-4756-adb7-6f04c5f6ef5c}</Project>
+      <Name>MicroServicesHackathon.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MicroServicesHackathon.Facts\MicroServicesHackathon.Facts.csproj">
+      <Project>{8cd32121-475b-48fe-8104-ca03cdab791c}</Project>
+      <Name>MicroServicesHackathon.Facts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MicroServicesHackathon.Rest\MicroServicesHackathon.Rest.csproj">
+      <Project>{14ac8a2e-d021-4821-81f8-d5d21b7ee51e}</Project>
+      <Name>MicroServicesHackathon.Rest</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

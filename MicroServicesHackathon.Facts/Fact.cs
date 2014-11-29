@@ -1,6 +1,6 @@
 namespace MicroServicesHackathon.Facts
 {
-    public class Fact
+    public abstract class Fact
     {
     }
 }
