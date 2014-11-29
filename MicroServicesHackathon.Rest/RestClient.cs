@@ -62,7 +62,8 @@ namespace MicroServicesHackathon.Rest
 
         private static bool IsPostSuccessful(IRestResponse response)
         {
-            return response.ResponseStatus == ResponseStatus.Completed && response.StatusCode == HttpStatusCode.Accepted;
+            return response.ResponseStatus == ResponseStatus.Completed && 
+                (response.StatusCode == HttpStatusCode.Accepted || response.StatusCode == HttpStatusCode.OK);
         }
 
         #endregion
