@@ -4,47 +4,82 @@ using System.Linq;
 
 namespace MicroServicesHackathon
 {
+    using System.Threading.Tasks;
     using MicroServicesHackathon.Domain;
     using MicroServicesHackathon.Facts;
     using MicroServicesHackathon.Rest;
 
     public class Referee
     {
-        private readonly IRestClient restClient;
+        private readonly IRestClient _restClient;
         private readonly string _acceptedMovementSubscribeId;
         private readonly IRepository _acceptedMovementRepository;
 
         public Referee(IRestClient restClient, IRepository acceptedMovementRepository)
         {
-            this.restClient = restClient;
+            _restClient = restClient;
             _acceptedMovementRepository = acceptedMovementRepository;
-            _acceptedMovementSubscribeId = this.restClient.Subscribe(ProposedMovement.Topic);
+            _acceptedMovementSubscribeId = _restClient.Subscribe(ProposedMovement.Topic);
         }
 
-        public void ProcessMovements()
-        {
-            while (true) {
-                ProposedMovement fact = restClient.NextFact<ProposedMovement>(
-                    ProposedMovement.Topic,
-                    _acceptedMovementSubscribeId);
+        public bool IsGameOver { get; set; }
 
-                Movement movement = Convert(fact);
-                IList<Movement> previousMovements = 
-                    _acceptedMovementRepository.GetGame(fact.GameId)
+        public Task Start()
+        {
+            IsGameOver = false;
+
+            return Task.Factory.StartNew(() =>
+            {
+                while (!IsGameOver) {
+                    ProcessMovement();
+                }
+            });
+        }
+
+        public void ProcessMovement()
+        {
+            ProposedMovement fact = GetMovement();
+            Movement movement = Convert(fact);
+
+            IList<Movement> previousMovements =
+                _acceptedMovementRepository.GetGame(fact.GameId)
                     .Select(Convert)
                     .ToList();
-                Board board = new Board(previousMovements);
-                if (board.IsValid(movement)) {
-                    _acceptedMovementRepository.Save(fact);
-                    // todo; accept movement fact
+            Board board = new Board(previousMovements);
 
-                } else {
-                    // todo: reject movement fact
-                }
+            if (board.IsValid(movement)) {
+                AcceptedMovement acceptedMovement = Accept(fact);
+                _restClient.PostFact(AcceptedMovement.Topic, acceptedMovement);
+                _acceptedMovementRepository.Save(acceptedMovement);
+            } else {
+                InvalidMovement invalidMovement = Reject(fact);
+                _restClient.PostFact(InvalidMovement.Topic, invalidMovement);
             }
         }
 
-        public static Movement Convert(MovementFact fact)
+        private ProposedMovement GetMovement()
+        {
+            ProposedMovement fact = null;
+
+            int attempted = 10;
+            while (attempted > 0) {
+                fact = _restClient.NextFact<ProposedMovement>(
+                    ProposedMovement.Topic,
+                    _acceptedMovementSubscribeId,
+                    30);
+                if (fact == null) {
+                    attempted--;
+                } else {
+                    break;
+                }
+            }
+
+            if (fact == null)
+                throw new TimeoutException("Unable to get a proposed movement within the expected attempts");
+            return fact;
+        }
+
+        private static Movement Convert(MovementFact fact)
         {
             if (fact == null)
                 throw new ArgumentNullException("fact");
@@ -53,11 +88,29 @@ namespace MicroServicesHackathon
 
             return new Movement(fact.Position.X, fact.Position.Y, fact.PlayerId);
         }
+
+        private static AcceptedMovement Accept(ProposedMovement fact)
+        {
+            return new AcceptedMovement {
+                GameId = fact.GameId,
+                PlayerId = fact.PlayerId,
+                Position = fact.Position
+            };
+        }
+
+        private static InvalidMovement Reject(ProposedMovement fact)
+        {
+            return new InvalidMovement {
+                GameId = fact.GameId,
+                PlayerId = fact.PlayerId,
+                Position = fact.Position
+            };
+        }
     }
 
     public interface IRepository
     {
-        void Save(MovementFact movement);
+        void Save(AcceptedMovement movement);
         IEnumerable<AcceptedMovement> GetGame(string gameId);
     }
 }

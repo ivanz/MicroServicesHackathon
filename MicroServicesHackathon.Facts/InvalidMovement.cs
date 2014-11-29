@@ -2,6 +2,6 @@
 {
     public class InvalidMovement : MovementFact
     {
-        public override string TopicName { get { return "game.invalid_move"; } }
+        public const string Topic = "game.invalid_move";
     }
 }
