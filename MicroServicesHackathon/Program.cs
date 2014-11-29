@@ -1,8 +1,8 @@
+using System.Configuration;
 using MicroServicesHackathon.Facts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using MicroServicesHackathon.Repository;
 using MicroServicesHackathon.Rest;
 using StackExchange.Redis;
@@ -15,16 +15,17 @@ namespace MicroServicesHackathon
         {
 
 
-            new RestClient().PostFact("chat", new ChatFact() {
+            new RestClient().PostFact("chat", new ChatFact
+            {
                  says = "banana",
                  who = "bomb"
             });
 
-            var redisHost = "127.0.0.1";
-            var redisPort = 6379;
+            var redisHost = ConfigurationManager.AppSettings["redishost"]; // "127.0.0.1";
+            var redisPort = Convert.ToInt32(ConfigurationManager.AppSettings["redisport"]);
 
             var connectionMultiplexer = ConnectionMultiplexer.Connect(
-                new ConfigurationOptions()
+                new ConfigurationOptions
                 {
                     EndPoints =
                     {
@@ -41,8 +42,8 @@ namespace MicroServicesHackathon
 
             IRestClient restClient = new RestClient();
             //Referee referee = new Referee(restClient, repository);
-            Referee referee = new Referee(restClient, hRepository);
-            Task task = referee.Start();
+            var referee = new Referee(restClient, hRepository);
+            var task = referee.Start();
             task.Wait();
         }
     }
