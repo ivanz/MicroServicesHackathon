@@ -49,11 +49,11 @@ namespace MicroServicesHackathon
 
             if (board.IsValid(movement)) {
                 AcceptedMovement acceptedMovement = Accept(fact);
-                _restClient.PostFact(acceptedMovement.TopicName, acceptedMovement);
+                _restClient.PostFact(AcceptedMovement.Topic, acceptedMovement);
                 _acceptedMovementRepository.Save(acceptedMovement);
             } else {
                 InvalidMovement invalidMovement = Reject(fact);
-                _restClient.PostFact(invalidMovement.TopicName, invalidMovement);
+                _restClient.PostFact(InvalidMovement.Topic, invalidMovement);
             }
         }
 
