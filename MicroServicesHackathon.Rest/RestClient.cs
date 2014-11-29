@@ -30,7 +30,7 @@ namespace MicroServicesHackathon.Rest
 
         public TFact NextFact<TFact>(string topic, string subscription, int waitSeconds = 1) where TFact : Fact, new()
         {
-            if (waitSeconds <= 1)
+            if (waitSeconds <= 0)
                 throw new ArgumentOutOfRangeException("waitSeconds", "waitSeconds has to > 0");
 
             RestRequest request = new RestRequest("/topics/{topic_name}/subscriptions/{subscription_id}/next", Method.GET);
