@@ -4,18 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{971917B3-52CC-462E-81A3-832995311624}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{C9DB54DA-7326-4E49-A114-A35A5D75075E}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MicroServicesHackathon</RootNamespace>
-    <AssemblyName>MicroServicesHackathon</AssemblyName>
+    <RootNamespace>MicroServicesHackathon.Data.Redis</RootNamespace>
+    <AssemblyName>MicroServicesHackathon.Data.Redis</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -25,7 +24,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -34,6 +32,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="StackExchange.Redis">
+      <HintPath>..\packages\StackExchange.Redis.1.0.371\lib\net45\StackExchange.Redis.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -44,35 +48,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="InMemoryRepository.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="IRedisRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Referee.cs" />
+    <Compile Include="RedisRepository.cs" />
+    <Compile Include="RedisRepositoryAdaptor.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MicroServicesHackathon.Data.Redis\MicroServicesHackathon.Data.Redis.csproj">
-      <Project>{c9db54da-7326-4e49-a114-a35a5d75075e}</Project>
-      <Name>MicroServicesHackathon.Data.Redis</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MicroServicesHackathon.Data\MicroServicesHackathon.Data.csproj">
       <Project>{592f1501-5521-4a3b-95cd-3b35ccfaf3a0}</Project>
       <Name>MicroServicesHackathon.Data</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MicroServicesHackathon.Domain\MicroServicesHackathon.Domain.csproj">
-      <Project>{6d7d639b-9b21-4756-adb7-6f04c5f6ef5c}</Project>
-      <Name>MicroServicesHackathon.Domain</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MicroServicesHackathon.Facts\MicroServicesHackathon.Facts.csproj">
       <Project>{8cd32121-475b-48fe-8104-ca03cdab791c}</Project>
       <Name>MicroServicesHackathon.Facts</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MicroServicesHackathon.Rest\MicroServicesHackathon.Rest.csproj">
-      <Project>{14ac8a2e-d021-4821-81f8-d5d21b7ee51e}</Project>
-      <Name>MicroServicesHackathon.Rest</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

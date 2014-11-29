@@ -1,13 +1,14 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
+using MicroServicesHackathon.Facts;
+using MicroServicesHackathon.Rest;
+using MicroServicesHackathon.Data;
+using MicroServicesHackathon;
+using Moq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace MicroServicesHackathon.Tests
 {
-    using System;
-    using System.Collections.Generic;
-    using MicroServicesHackathon.Facts;
-    using MicroServicesHackathon.Rest;
-    using Moq;
 
     [TestClass]
     public class RefereeTests
@@ -32,17 +33,16 @@ namespace MicroServicesHackathon.Tests
             mockRestClient
                 .Setup(m => m.NextFact<ProposedMovement>(ProposedMovement.Topic, subscriptionId, 30))
                 .Returns(new ProposedMovement {
-                    GameId = gameId, 
-                    PlayerId = firstPlayerId, 
+                    GameId = gameId,
+                    PlayerId = firstPlayerId,
                     Position = new Position { X = 0, Y = 1 }
                 });
             mockRestClient
-                .Setup(m => m.PostFact(AcceptedMovement.Topic, Moq.It.IsAny<AcceptedMovement>()))
-                .Callback((string topic, Fact fact) =>
-                {
+                .Setup(m => m.PostFact(AcceptedMovement.Topic, It.IsAny<AcceptedMovement>()))
+                .Callback((string topic, Fact fact) => {
                     Assert.IsInstanceOfType(fact, typeof(AcceptedMovement));
 
-                    AcceptedMovement mov = (AcceptedMovement) fact;
+                    AcceptedMovement mov = (AcceptedMovement)fact;
                     Assert.AreEqual(0, mov.Position.X);
                     Assert.AreEqual(1, mov.Position.Y);
                     Assert.AreEqual(gameId, mov.GameId);
@@ -50,8 +50,7 @@ namespace MicroServicesHackathon.Tests
                 });
 
             mockRepository.Setup(m => m.GetGame(gameId)).Returns(previousMovements);
-            mockRepository.Setup(m => m.Save(Moq.It.IsAny<AcceptedMovement>())).Callback((AcceptedMovement mov) =>
-            {
+            mockRepository.Setup(m => m.Save(It.IsAny<AcceptedMovement>())).Callback((AcceptedMovement mov) => {
                 Assert.AreEqual(0, mov.Position.X);
                 Assert.AreEqual(1, mov.Position.Y);
                 Assert.AreEqual(gameId, mov.GameId);

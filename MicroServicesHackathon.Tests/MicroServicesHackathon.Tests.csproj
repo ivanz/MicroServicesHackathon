@@ -59,9 +59,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
+    <ProjectReference Include="..\MicroServicesHackathon.Data\MicroServicesHackathon.Data.csproj">
+      <Project>{592f1501-5521-4a3b-95cd-3b35ccfaf3a0}</Project>
+      <Name>MicroServicesHackathon.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MicroServicesHackathon.Domain\MicroServicesHackathon.Domain.csproj">
       <Project>{6d7d639b-9b21-4756-adb7-6f04c5f6ef5c}</Project>
       <Name>MicroServicesHackathon.Domain</Name>
@@ -75,9 +76,12 @@
       <Name>MicroServicesHackathon.Rest</Name>
     </ProjectReference>
     <ProjectReference Include="..\MicroServicesHackathon\MicroServicesHackathon.csproj">
-      <Project>{971917B3-52CC-462E-81A3-832995311624}</Project>
+      <Project>{971917b3-52cc-462e-81a3-832995311624}</Project>
       <Name>MicroServicesHackathon</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

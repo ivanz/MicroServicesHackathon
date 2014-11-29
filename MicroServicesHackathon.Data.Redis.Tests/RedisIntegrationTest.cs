@@ -1,9 +1,9 @@
-using NUnit.Framework;
 using StackExchange.Redis;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace MicroServicesHackathon.Repository.Tests
+namespace MicroServicesHackathon.Data.Redis.Tests
 {
-    [TestFixture]
+    [TestClass]
     public class RedisIntegrationTest
     {
         private readonly ConnectionMultiplexer _connectionMultiplexer;
@@ -25,7 +25,7 @@ namespace MicroServicesHackathon.Repository.Tests
                 });
         }
 
-        [Test]
+        [TestMethod]
         public void TestSet()
         {
             var redisRepository = new RedisRepository(_connectionMultiplexer);

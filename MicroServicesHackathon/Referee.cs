@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MicroServicesHackathon.Data;
 using MicroServicesHackathon.Domain;
 using MicroServicesHackathon.Facts;
 using MicroServicesHackathon.Rest;
@@ -9,14 +10,13 @@ using MicroServicesHackathon.Rest;
 namespace MicroServicesHackathon
 {
 
-
     public class Referee
     {
         private readonly IRestClient _restClient;
         private readonly string _acceptedMovementSubscribeId;
-        private readonly IHRepository _acceptedMovementRepository;
+        private readonly IRepository _acceptedMovementRepository;
 
-        public Referee(IRestClient restClient, IHRepository acceptedMovementRepository)
+        public Referee(IRestClient restClient, IRepository acceptedMovementRepository)
         {
             _restClient = restClient;
             _acceptedMovementRepository = acceptedMovementRepository;

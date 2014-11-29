@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MicroServicesHackathon.Repository.Tests
+namespace MicroServicesHackathon.Data.Redis.Tests
 {
     public class A
     {

@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("MicroServicesHackathon.Repository.Tests")]
+[assembly: AssemblyTitle("MicroServicesHackathon.Data")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("MicroServicesHackathon.Repository.Tests")]
+[assembly: AssemblyProduct("MicroServicesHackathon.Data")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("52ec90b8-a8be-4262-86ee-b527420b6c5d")]
+[assembly: Guid("94abd662-e7dd-461a-af32-0b15d26bf281")]
 
 // Version information for an assembly consists of the following four values:
 //

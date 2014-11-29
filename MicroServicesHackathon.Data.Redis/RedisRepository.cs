@@ -1,11 +1,12 @@
 ﻿using Newtonsoft.Json;
 using StackExchange.Redis;
 
-namespace MicroServicesHackathon.Repository
+namespace MicroServicesHackathon.Data.Redis
 {
-    public class RedisRepository : IRepository
+    public class RedisRepository : IRedisRepository
     {
         private readonly ConnectionMultiplexer _connectionMultiplexer;
+
         public RedisRepository(ConnectionMultiplexer connectionMultiplexer)
         {
             _connectionMultiplexer = connectionMultiplexer;
