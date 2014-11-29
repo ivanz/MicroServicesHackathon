@@ -1,21 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using MicroServicesHackathon.Domain;
+using MicroServicesHackathon.Facts;
+using MicroServicesHackathon.Rest;
 
 namespace MicroServicesHackathon
 {
-    using System.Threading.Tasks;
-    using MicroServicesHackathon.Domain;
-    using MicroServicesHackathon.Facts;
-    using MicroServicesHackathon.Rest;
+
 
     public class Referee
     {
         private readonly IRestClient _restClient;
         private readonly string _acceptedMovementSubscribeId;
-        private readonly IRepository _acceptedMovementRepository;
+        private readonly IHRepository _acceptedMovementRepository;
 
-        public Referee(IRestClient restClient, IRepository acceptedMovementRepository)
+        public Referee(IRestClient restClient, IHRepository acceptedMovementRepository)
         {
             _restClient = restClient;
             _acceptedMovementRepository = acceptedMovementRepository;
@@ -106,11 +107,5 @@ namespace MicroServicesHackathon
                 Position = fact.Position
             };
         }
-    }
-
-    public interface IRepository
-    {
-        void Save(AcceptedMovement movement);
-        IEnumerable<AcceptedMovement> GetGame(string gameId);
     }
 }

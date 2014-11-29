@@ -3,7 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MicroServicesHackathon.Repository;
 using MicroServicesHackathon.Rest;
+using StackExchange.Redis;
 
 namespace MicroServicesHackathon
 {
@@ -11,33 +13,41 @@ namespace MicroServicesHackathon
     {
         static void Main(string[] args)
         {
-            var redisHost = "127.0.0.1";
-            var redisPort = 6379;
-            //var connectionMultiplexer = ConnectionMultiplexer.Connect(
-            //    new ConfigurationOptions()
-            //    {
-            //        EndPoints =
-            //                {
-            //                    string.Format("{0}:{1}", redisHost, redisPort)
-            //                },
-            //        ConnectTimeout = 10000,
-            //        AbortOnConnectFail = false
-            //    });
+
 
             new RestClient().PostFact("chat", new ChatFact() {
                  says = "banana",
                  who = "bomb"
             });
 
-            IRepository repository = new InMemoryRepository();
+            var redisHost = "127.0.0.1";
+            var redisPort = 6379;
+
+            var connectionMultiplexer = ConnectionMultiplexer.Connect(
+                new ConfigurationOptions()
+                {
+                    EndPoints =
+                    {
+                        string.Format("{0}:{1}", redisHost, redisPort)
+                    },
+                    ConnectTimeout = 10000,
+                    AbortOnConnectFail = false
+                });
+
+
+            var hRepository = new HRepository(new RedisRepository(connectionMultiplexer));
+
+            //IHRepository repository = new InMemoryRepository();
+
             IRestClient restClient = new RestClient();
-            Referee referee = new Referee(restClient, repository);
+            //Referee referee = new Referee(restClient, repository);
+            Referee referee = new Referee(restClient, hRepository);
             Task task = referee.Start();
             task.Wait();
         }
     }
 
-    public class InMemoryRepository : IRepository
+    public class InMemoryRepository : IHRepository
     {
         private readonly IList<AcceptedMovement> _movements;
 

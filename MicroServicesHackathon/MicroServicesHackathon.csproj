@@ -34,6 +34,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="StackExchange.Redis, Version=1.0.316.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\StackExchange.Redis.1.0.371\lib\net45\StackExchange.Redis.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -43,6 +47,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HRepository.cs" />
+    <Compile Include="IHRepository.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Referee.cs" />
@@ -59,6 +65,10 @@
     <ProjectReference Include="..\MicroServicesHackathon.Facts\MicroServicesHackathon.Facts.csproj">
       <Project>{8cd32121-475b-48fe-8104-ca03cdab791c}</Project>
       <Name>MicroServicesHackathon.Facts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MicroServicesHackathon.Repository\MicroServicesHackathon.Repository.csproj">
+      <Project>{495cdbae-b0db-408b-8657-8e5dbea6785f}</Project>
+      <Name>MicroServicesHackathon.Repository</Name>
     </ProjectReference>
     <ProjectReference Include="..\MicroServicesHackathon.Rest\MicroServicesHackathon.Rest.csproj">
       <Project>{14ac8a2e-d021-4821-81f8-d5d21b7ee51e}</Project>
