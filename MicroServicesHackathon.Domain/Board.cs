@@ -3,30 +3,27 @@ using System.Collections.Generic;
 
 namespace MicroServicesHackathon.Domain
 {
+    using System.Collections.ObjectModel;
     using System.Linq;
 
     public class Board
     {
-        private readonly List<Movement> _movements;
-
-        public Board() : this(new List<Movement>())
+        public Board() : this(new Collection<Movement>())
         {
         }
 
-        public Board(List<Movement> movements)
+        public Board(IList<Movement> movements)
         {
             if (movements == null)
                 throw new ArgumentNullException("movements", "movements is null.");
 
             Size = 3;
-            _movements = movements;
+            Movements = movements;
         }
 
         public string GameId { get; set; }
 
-        public ICollection<Movement> Movements {
-            get { return _movements; }
-        }
+        public ICollection<Movement> Movements { get; private set; }
 
         public int Size { get; private set; }
 

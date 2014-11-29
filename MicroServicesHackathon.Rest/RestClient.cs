@@ -23,7 +23,7 @@ namespace MicroServicesHackathon.Rest
             throw new NotImplementedException();
         }
 
-        public Fact NextFact(string subscription)
+        public T NextFact<T>(string topic, string subscription) where T:Fact
         {
             throw new NotImplementedException();
         }

@@ -9,7 +9,7 @@ namespace MicroServicesHackathon.Rest
     {
         string Subscribe(string topic);
 
-        Fact NextFact(string subscription);
+        T NextFact<T>(string topic, string subscription) where T : Fact;
 
         void PostFact(string topic, Fact fact);
     }
